@@ -12,12 +12,18 @@ router.route('/').get((req, res) => {
 //Second end point api handles incoming http quests which are post requests 
 router.route('/add').post((req, res) => {
     const username = req.body.username;
-    const newuser = new User({ username });
+    const password = req.body.password;
+    const newuser = new User({ 
+        username, 
+        password
+    });
 
     newuser.save()
         .then(() => res.json('User added! '))
         .catch(err => res.status(400).json('Error: ' + err))
 });
+
+
 
 module.exports = router;
 

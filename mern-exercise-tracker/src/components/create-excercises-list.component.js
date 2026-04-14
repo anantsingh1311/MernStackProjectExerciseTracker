@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import axios from 'axios';
+// import LoggedInUser from './login-user.component';
 
 //For dates
 // npm install react-datepicker for date package
@@ -28,7 +29,7 @@ export default class EditExercise extends Component{
             description: '',
             duration:0,
             date: new Date(),
-            users:[]
+            //users:[]
         }
     }
 
@@ -40,17 +41,28 @@ export default class EditExercise extends Component{
         //     username:"test User"
         // })
         //creating an axios get request and then using the arrow function to get the user name in a drop down list in our form:
-          axios.get('http://localhost:5000/user/').then(res=>{
+      //     axios.get('http://localhost:5000/user/').then(res=>{
 
-               if(res.data.length > 0){
+      //          if(res.data.length > 0){
 
-                    this.setState({
+      //               this.setState({
 
-                        users :res.data.map(user=>user.username),
-                         username:res.data[0].username
-        })
+      //                   users :res.data.map(user=>user.username),
+      //                    username:res.data[0].username
+      //   })
+      // }
+      //   })
+
+      // Auto Set username from the log-in:
+      const loggedInUser = JSON.parse(localStorage.getItem("user"));
+
+      if(!loggedInUser){
+        window.location="/login-user"
+        return;
       }
-        })
+      this.setState({
+        username:loggedInUser.username
+      });
     }
 
     // Creating methods to handle state changes
@@ -110,7 +122,13 @@ export default class EditExercise extends Component{
     <form onSubmit={this.OnSubmit}>
   <div className="form-group">
     <label>Username:</label>
-    <select
+    <input
+    type="text"
+    className="form-control"
+    value={this.state.username}
+    disabled
+  />
+    {/* <select
       required
       className="form-control"
       value={this.state.username}
@@ -121,7 +139,7 @@ export default class EditExercise extends Component{
           {user}
         </option>
       ))}
-    </select>
+    </select> */}
   </div>
 
   <div className="form-group">

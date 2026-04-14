@@ -5,9 +5,11 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 import Navbar from "./components/navbar.component";
 import ExercisesList from "./components/excercises-list.component";
+import Home from "./components/home.component"
 import EditExercise from "./components/edit-excercises-list.component";
 import CreateExercise from "./components/create-excercises-list.component";
 import CreateUser from "./components/create-user.component";
+import LoginUser from "./components/login-user.component";
 
 function App() {
   return (
@@ -17,11 +19,14 @@ function App() {
     <Navbar />
     <br/>
     <Routes>
-    <Route path="/" exact Component={ExercisesList}/>
-    <Route path="/edit/:id" exact Component={EditExercise}/>
-    <Route path="/create" exact Component={CreateExercise}/>
-    <Route path="/user" exact Component={CreateUser}/>
-    </Routes>
+  <Route path="/" element={<Home/>} />
+  <Route path="/Excercises" element={<ExercisesList/>} />
+  <Route path="/login-user" element={<LoginUser />} />
+  <Route path="/edit/:id" element={<EditExercise />} />
+  <Route path="/create" element={<CreateExercise />} />
+  <Route path="/user" element={<CreateUser />} />
+</Routes>
+
     </div>
     </Router>
   );

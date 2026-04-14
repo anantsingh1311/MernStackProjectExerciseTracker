@@ -28,9 +28,13 @@ connection.once('open', () => { console.log("MongoDB database connection establi
 //use the routes created here in server file of backend
 const excerciseRouter = require('./routes/excercise');
 const userRouter = require('./routes/user');
+const authuserRoutes = require('./routes/auth')
 
 app.use('/exercise', excerciseRouter);
 app.use('/user', userRouter);
+
+app.use(express.json());
+app.use('/api',authuserRoutes);
 
 //this app starts the server on listening on the port specified above
 app.listen(port, () => {

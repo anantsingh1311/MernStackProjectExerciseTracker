@@ -9,11 +9,16 @@ export default class CreateUser extends Component {
 //Binding "this" keyword to their respective methods to perform their action
 //this -> represents the class name "CreateExercise"
         this.OnChangeUsername = this.OnChangeUsername.bind(this);
+        this.OnChangePassword = this.OnChangePassword.bind(this);
+        this.OnChangeCheckPassword = this.OnChangeCheckPassword.bind(this);
         this.OnSubmit = this.OnSubmit.bind(this);
+        
 
         //The state is used to declare variables in react
         this.state = {
             username: '',
+            password: '',
+            checkPassword:''
         }
     }
 
@@ -23,28 +28,49 @@ export default class CreateUser extends Component {
             })
 
         }
+    OnChangePassword(e){
+        this.setState({
+            password: e.target.value
+        })
+    }
+    OnChangeCheckPassword(e){
+        this.setState({
+            checkPassword: e.target.value
+        })
+    }
 
-        OnSubmit(e){
-            //To prevent default form submission
-            e.preventDefault();
-            console.log("SUBMIT TRIGGERED");
-            const user = {
-                username: this.state.username
+OnSubmit(e){
+    e.preventDefault();
 
-            }
+    if (this.state.password !== this.state.checkPassword) {
+        alert("The passwords don't match, please re-enter your password");
+        return;
+    }
 
-            // console.log(user);
+    console.log("SUBMIT TRIGGERED");
 
-            axios.post('http://localhost:5000/user/add', user)
-            .then(res => console.log(res.data));
+    const user = {
+        username: this.state.username,
+        password: this.state.password
+    };
 
-            // // To reload the page after the onSubmit Button is clicked
-            // window.location = "/"
-            this.setState({
-                username:''
-            })
+   axios.post('http://localhost:5000/user/add', user)
+  .then(res => console.log(res.data))
+  .catch(err => {
+      if (err.response) {
+          console.log("BACKEND ERROR:", err.response.data);
+      } else {
+          console.log(err);
+      }
+  });
 
-        }
+    this.setState({
+        username: '',
+        password: '',
+        checkPassword: ''
+    });
+}
+
 
 
 
@@ -63,6 +89,20 @@ render(){
                     className='form-control'
                     value={this.state.username}
                     onChange={this.OnChangeUsername}/>
+                     <label>Please Enter your password</label>
+                    <input type='password'
+                    required
+                    minLength={6}
+                    className='form-control'
+                    value={this.state.password}
+                    onChange={this.OnChangePassword}/>
+                     <label>Please Re-Enter your Password</label>
+                    <input type='password'
+                    required
+                    minLength={6}
+                    className='form-control'
+                    value={this.state.checkPassword}
+                    onChange={this.OnChangeCheckPassword}/>
                 </div>
                 <div className='form-group'>
                     <input type='submit' value='Create User' className='btn btn-primary'/>
