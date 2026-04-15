@@ -1,12 +1,21 @@
 //The route we are creating 
 const router = require('express').Router();
 let Excercise = require('../models/excercise-model')
+// let User = require('../models/user-model')
 
 //first end point that handles incoming http requests which is a get request
-router.route('/').get((req, res) => {
-    Excercise.find()
-        .then(exercise => res.json(exercise))
-        .catch(err => res.status(400).json('Error: ' + err));
+router.route('/:username').get(async (req, res) => {
+    // To make things simple, we look for username for now
+    const {username} = req.params;
+    // console.log("req.params.username =", username)
+    // we make a promise and await a response
+    const excerciseFound = await Excercise.find({username:req.params.username});
+    //  console.log("excerciseFound =", excerciseFound);
+    // if we dont find that promise to be fullfilled we throw this error
+    if(!excerciseFound || excerciseFound.length === 0) return res.status(404).json({message:"Not found"})
+    // We find Excercises based on username
+    res.json(excerciseFound);
+
 });
 
 //Second end point api handles incoming http quests which are post requests 

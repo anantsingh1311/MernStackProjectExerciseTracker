@@ -9,6 +9,7 @@ const Exercise = (props) => (
     <td>{props.exercise.description}</td>
     <td>{props.exercise.duration}</td>
     <td>{props.exercise.date.substring(0, 10)}</td>
+    <td>{props.exercise.calories}</td>
     <td>
       <Link className = 'btn btn-primary' to={`/edit/${props.exercise._id}`}>edit</Link>{" "}
       |{" "}
@@ -30,18 +31,33 @@ export default class ExercisesList extends Component {
 
     this.state = {
       exercises: [],
+      user: JSON.parse(localStorage.getItem("user"))
     };
+  }
+
+  syncUser = ()=>{
+    this.setState({user:JSON.parse(localStorage.getItem("user"))});
   }
 
   // ✅ FETCH exercises when component loads
   componentDidMount() {
-    axios
-      .get("http://localhost:5000/exercise/")
-      .then((res) => {
-        this.setState({ exercises: res.data });
-      })
-      .catch((err) => console.log(err));
+    window.addEventListener("storage",this.syncUser);
+
+    const {user} = this.state;
+    if(user && user.username){
+
+      axios
+        .get(`http://localhost:5000/exercise/${user.username}`)
+        .then((res) => {
+          this.setState({ exercises: res.data });
+        })
+        .catch((err) => console.log(err));
+    }
   }
+
+  componentWillUnmount() {
+  window.removeEventListener("storage", this.syncUser);
+}
 
   // ✅ DELETE exercise
   deleteExercise(id) {
@@ -76,12 +92,14 @@ export default class ExercisesList extends Component {
               <th>Description</th>
               <th>Duration</th>
               <th>Date</th>
+              <th>Calories Burnt</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>{this.exerciseList()}</tbody>
         </table>
       </div>
+
     );
   }
 }

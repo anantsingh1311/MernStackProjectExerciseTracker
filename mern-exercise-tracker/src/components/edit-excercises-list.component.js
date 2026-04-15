@@ -12,7 +12,14 @@ export default function EditExercise() {
   const [description, setDescription] = useState("");
   const [duration, setDuration] = useState(0);
   const [date, setDate] = useState(new Date());
+
+  const [calories, setCalories] = useState("");
+
   const [users, setUsers] = useState([]);
+
+  setCalories = ()=>{
+    
+  }
 
   // Load exercise + users
   useEffect(() => {
@@ -22,6 +29,7 @@ export default function EditExercise() {
         setUsername(res.data.username);
         setDescription(res.data.description);
         setDuration(res.data.duration);
+        setCalories()
         setDate(new Date(res.data.date));
       })
       .catch((err) => console.log(err));
